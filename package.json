@@ -1,0 +1,26 @@
+{
+  "name": "air-superchat-prototype",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/LinaTsukusu/air-superchat-prototype.git",
+  "author": "neverclear <neverclear86sab@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "debug": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "data-store": "^3.1.0",
+    "google-auth-library": "^4.2.5",
+    "googleapis": "^41.0.1",
+    "youtube-live-chat": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "ts-node": "^8.3.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.3"
+  }
+}
