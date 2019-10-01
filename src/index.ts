@@ -8,10 +8,15 @@ const headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleW
 const interval = 1000 * 5
 const command = ['/superchatair', '/sa']
 
-const channelId = 'UCxkOLgdNumvVIQqn5ps_bJA'
+async function main(args: string[]) {
+  const channelId = args[2] || process.env.CHANNEL_ID
 
+  if (!channelId) {
+    console.log('Channel ID is nothing.')
+    return
+  }
 
-async function main() {
+  // console.log(args)
   console.log(`ChannelID: ${channelId}`)
   const liveRes = await axios.get(`https://www.youtube.com/channel/${channelId}/live`, {headers})
   const liveId = liveRes.data.match(/"watchEndpoint":{"videoId":"(\w*)"}/gm)[0].match(/"videoId":"(.*)"/)[1]
@@ -102,4 +107,4 @@ async function superChat(price: string, user: string, message: string) {
   }
 }
 
-main()
+main(process.argv)
