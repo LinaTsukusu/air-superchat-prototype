@@ -1,63 +1,49 @@
 import axios from 'axios'
+import {LiveChat} from 'youtube-chat'
 const Store = require('data-store');
 require('dotenv').config();
 
 
-const headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
-
-const interval = 1000 * 5
 const command = ['/superchatair', '/sa']
 
 async function main(args: string[]) {
   const channelId = args[2] || process.env.CHANNEL_ID
 
   if (!channelId) {
-    console.log('Channel ID is nothing.')
+    console.error('Channel ID is nothing.')
     return
   }
 
-  // console.log(args)
-  console.log(`ChannelID: ${channelId}`)
-  const liveRes = await axios.get(`https://www.youtube.com/channel/${channelId}/live`, {headers})
-  const liveId = liveRes.data.match(/"watchEndpoint":{"videoId":"(\w*)"}/gm)[0].match(/"videoId":"(.*)"/)[1]
-  console.log(`LiveID: ${liveId}`)
-  setInterval(async () => {
-    const res = await axios.get(`https://www.youtube.com/live_chat?v=${liveId}&pbj=1`, {headers})
+  const chat = new LiveChat({channelId: channelId})
 
-    const now = new Date().valueOf() - interval
+  chat.on('start', (liveId) => {
+    console.log(`Successful connect stream [${liveId}]`)
+  })
 
-    const actions: { authorName: string, message: string, time: Date }[] = res.data[1].response.contents.liveChatRenderer.actions.slice(0, -1)
-      .filter((v: any) => {
-        try {
-          return new Date(Number(v.addChatItemAction.item.liveChatTextMessageRenderer.timestampUsec) / 1000).valueOf() >= now
-        } catch (e) {
-          return false
-        }
-      })
-      .map((v: any) => {
-        const item = v.addChatItemAction.item.liveChatTextMessageRenderer
-        // console.log(JSON.stringify(item))
-        return {
-          authorName: item.authorName.simpleText,
-          message: item.message.runs[0].text,
-          // time: new Date(Number(item.timestampUsec) / 1000),
-        }
-      })
-      .filter((v: { authorName: string, message: string }) => command.some((c: string) => v.message.startsWith(c)))
+  chat.on('end', () => {
+    console.log('Finished.')
+  })
 
-    // console.log(actions)
-
-    actions.forEach((v) => {
-      // console.log(v)
-      const args = v.message.match(/^(.+?)\s([^\s]+)\s*(.*)$/)
-      // console.log(args)
-      if (args) {
-        superChat(args[2], v.authorName, args[3])
+  chat.on('comment', (comment) => {
+    const message = comment.message.map((v) => {
+      if ('text' in v) {
+        return v.text
+      } else {
+        return v.alt
       }
-    })
-  }, interval)
+    }).join()
 
-  console.log("OK!")
+    if (command.some((c) => message.startsWith(c))) {
+      const args = message.match(/^(\/.+?)\s([^\s]+)\s*(.*)$/)
+      if (args) {
+        superChat(args[2], comment.author.name, args[3])
+      }
+    }
+  })
+
+  chat.on('error', (err) => {
+    console.error(err)
+  })
 }
 
 

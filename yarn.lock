@@ -649,6 +649,13 @@ yn@^3.0.0:
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.0.tgz#fcbe2db63610361afcc5eb9e0ac91e976d046114"
   integrity sha512-kKfnnYkbTfrAdd0xICNFw7Atm8nKpLcLv9AZGEt+kczL/WQVai4e2V6ZN8U/O+iI6WrNuJjNNOyu4zfhl9D3Hg==
 
+youtube-chat@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/youtube-chat/-/youtube-chat-1.0.2.tgz#f22b16cfca0452126a13b09971d7b324e17d0a4f"
+  integrity sha512-+1IWLZpouLUB1xiq6cORJfTLloHOk6O78WhmXI7/GFEnwyZsy5KSa9N6+fuyt7zOXk4aFihYVHvVJLsonHZBXQ==
+  dependencies:
+    axios "^0.19.0"
+
 youtube-live-chat@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/youtube-live-chat/-/youtube-live-chat-1.0.3.tgz#791dbd35e655ad7dedd7d190ac2c90cd47f5547f"
