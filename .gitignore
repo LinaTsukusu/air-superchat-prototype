@@ -1,5 +1,6 @@
 node_modules
 .env
+.tokens.json
 tmp
 dist
 yarn-error.log

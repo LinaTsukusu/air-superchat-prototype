@@ -44,6 +44,8 @@ async function main(args: string[]) {
   chat.on('error', (err) => {
     console.error(err)
   })
+
+  chat.start()
 }
 
 
@@ -60,12 +62,13 @@ async function sendAlert(token: string, price: string, user: string, messageText
 
 
 async function superChat(price: string, user: string, message: string) {
-  const store = new Store('tokens')
-  const refreshToken = store.get('refresh_token')
+  const store = new Store({path: `${process.cwd()}/.tokens.json`})
   try {
     try {
       await sendAlert(store.get('token'), price, user, message)
     } catch (e) {
+
+      const refreshToken = store.get('refresh_token')
       const data: {grant_type: string, client_id: string, client_secret: string, redirect_uri: string, code?: string, refresh_token?: string} = {
         grant_type: 'refresh_token',
         client_id: process.env.SL_CLIENT_ID!,
