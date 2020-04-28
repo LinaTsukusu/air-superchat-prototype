@@ -15,6 +15,7 @@
     "data-store": "^3.1.0",
     "google-auth-library": "^4.2.5",
     "googleapis": "^41.0.1",
+    "youtube-chat": "^1.0.2",
     "youtube-live-chat": "^1.0.3"
   },
   "devDependencies": {
