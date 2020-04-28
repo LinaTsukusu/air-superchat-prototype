@@ -3,7 +3,7 @@ const Store = require('data-store');
 require('dotenv').config();
 
 
-const headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
+const headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
 
 const interval = 1000 * 5
 const command = ['/superchatair', '/sa']
@@ -19,7 +19,7 @@ async function main(args: string[]) {
   // console.log(args)
   console.log(`ChannelID: ${channelId}`)
   const liveRes = await axios.get(`https://www.youtube.com/channel/${channelId}/live`, {headers})
-  const liveId = liveRes.data.match(/"watchEndpoint":{"videoId":"(\w*)"}/gm)[0].match(/"videoId":"(.*)"/)[1]
+  const liveId = liveRes.data.match(/"watchEndpoint":{"videoId":"(\S*?)"}/m)[1]
   console.log(`LiveID: ${liveId}`)
   setInterval(async () => {
     const res = await axios.get(`https://www.youtube.com/live_chat?v=${liveId}&pbj=1`, {headers})
